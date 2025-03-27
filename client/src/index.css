@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+
+/* index.css */
+:root {
+  --primary-color: #3490dc; /* Example of primary color */
+  --secondary-color: #ff6347; /* Example of secondary color */
+  --background-color: #f7fafc; /* Example background color */
+  --text-color: #333333; /* Text color */
+}
+
+/* You can also add classes for your colors */
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
