@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -13,16 +12,9 @@ const Navbar = () => {
     // Clear the token from localStorage
     localStorage.removeItem("token");
 
-    // Redirect user to home page
+    // Optionally, redirect the user to the login page after logout
     navigate("/");
   };
-
-  // Redirect if the token is removed
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, []);
 
   return (
     <nav className="bg-black text-gray-500 sticky top-0 w-full flex justify-between items-center px-6 py-4">
@@ -34,7 +26,8 @@ const Navbar = () => {
       {/* Mobile Menu Button */}
       <div className="sm:hidden" onClick={toggleMenu}>
         <button className="text-white">
-          <i className="fas fa-bars"></i> {/* Using FontAwesome for hamburger */}
+          <i className="fas fa-bars"></i>{" "}
+          {/* Using FontAwesome for hamburger */}
         </button>
       </div>
 
@@ -62,12 +55,13 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="mx-4 my-2">
-          <button
+          <Link
+            to="/"
             onClick={handleLogout}
             className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
           >
             Logout
-          </button>
+          </Link>
         </li>
       </ul>
     </nav>
