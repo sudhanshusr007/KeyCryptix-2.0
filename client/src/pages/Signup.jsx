@@ -10,18 +10,39 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleSignup = () => {
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent form refresh
+
     let newErrors = {};
 
+    // Validation
     if (!formData.email) newErrors.email = "Email is required!";
     if (!formData.password) newErrors.password = "Password is required!";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    // API integration will be added here later
-    toast.success("Signup Successful!");
-    setTimeout(() => navigate("/"), 1500);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Signup Successful!");
+        setTimeout(() => navigate("/dashboard"), 1500);
+      } else {
+        toast.error(data.message); // Display error message from backend
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error(error);
+    }
   };
 
   return (
@@ -74,11 +95,7 @@ const Signup = () => {
               className="absolute inset-y-0 right-0 pr-3 flex items-center"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? (
-                <EyeOff className="size-5 text-black" />
-              ) : (
-                <Eye className="size-5 text-gray-400" />
-              )}
+              {showPassword ? <EyeOff className="size-5 text-black" /> : <Eye className="size-5 text-gray-400" />}
             </button>
           </div>
           {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}

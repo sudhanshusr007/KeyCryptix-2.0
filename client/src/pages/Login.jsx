@@ -10,18 +10,43 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form refresh
+
     let newErrors = {};
 
+    // Validation
     if (!formData.email) newErrors.email = "Email is required!";
     if (!formData.password) newErrors.password = "Password is required!";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    // API integration will be added here later
-    toast.success("Login Successful!");
-    setTimeout(() => navigate("/dashboard"), 1500);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Login Successful!");
+        // Store the JWT token in localStorage (or sessionStorage)
+        localStorage.setItem("token", data.token);
+
+        // Redirect to the dashboard
+        setTimeout(() => navigate("/dashboard"), 1500);
+      } else {
+        toast.error(data.message); // Display error message
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error(error);
+    }
   };
 
   return (
@@ -48,9 +73,13 @@ const Login = () => {
             }`}
             placeholder="youremail@example.com"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
         {/* Password Input with Eye Toggle */}
@@ -67,7 +96,9 @@ const Login = () => {
               }`}
               placeholder="************"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
             <button
               type="button"
@@ -81,7 +112,9 @@ const Login = () => {
               )}
             </button>
           </div>
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
 
         {/* Login Button */}

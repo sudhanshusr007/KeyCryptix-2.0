@@ -2,21 +2,43 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaPlusCircle } from 'react-icons/fa'; // Import react-icons
 
-const AddPasswordForm = ({ addPassword }) => {
+const AddPasswordForm = () => {
   const [website, setWebsite] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if all fields are provided
     if (website && username && password) {
-      addPassword({ website, username, password });
-      setWebsite('');
-      setUsername('');
-      setPassword('');
-      toast.success('Password added successfully!'); // Show success toast
+      try {
+        // Send the data to the backend API to save the password
+        const response = await fetch('http://localhost:5000/api/passwords/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming token is stored in localStorage
+          },
+          body: JSON.stringify({ website, username, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setWebsite('');
+          setUsername('');
+          setPassword('');
+          toast.success(data.message || 'Password added successfully!'); // Show success toast
+        } else {
+          toast.error(data.message || 'Failed to add password'); // Show error toast
+        }
+      } catch (error) {
+        toast.error('Something went wrong. Please try again later.');
+      }
     } else {
-      toast.error('Please fill in all fields'); // Show error toast
+      toast.error('Please fill in all fields'); // Show error toast if fields are empty
     }
   };
 
