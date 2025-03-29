@@ -18,7 +18,7 @@ function copyText(txt) {
 // **✅ Fetch passwords from backend**
 const fetchPasswords = async (setPasswords) => {
   try {
-    const response = await fetch('http://localhost:5000/api/passwords', {
+    const response = await fetch(`${REACT_APP_API_BASE_URL}/api/passwords`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming JWT auth
