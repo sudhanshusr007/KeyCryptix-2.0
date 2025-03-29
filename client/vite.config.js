@@ -5,11 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [ tailwindcss(),react()],
-  base: "./",
+  base: "/", // Ensure the correct base path
   build: {
-    outDir: "dist", // Ensures Vercel knows where to look
+    outDir: "dist",
   },
   server: {
-    historyApiFallback: true, // Fixes React Router 404 issue
+    historyApiFallback: true, // Ensures proper routing
   },
 })
