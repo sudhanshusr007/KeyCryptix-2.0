@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import REACT_APP_API_BASE_URL from '../utils/config';
 
 // Function to mask the password
 function maskPassword(pass) {
@@ -37,7 +38,7 @@ const fetchPasswords = async (setPasswords) => {
 // **✅ Delete password (Backend)**
 const deletePassword = async (id, passwords, setPasswords) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/passwords/${id}`, {
+    const response = await fetch(`${REACT_APP_API_BASE_URL}/api/passwords/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,

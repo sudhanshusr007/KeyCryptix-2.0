@@ -3,6 +3,7 @@ import { Eye, EyeOff, Lock } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import REACT_APP_API_BASE_URL from "../utils/config";
 
 const Signup = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -23,7 +24,7 @@ const Signup = () => {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch(`${REACT_APP_API_BASE_URL}api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaPlusCircle } from 'react-icons/fa'; // Import react-icons
+import REACT_APP_API_BASE_URL from '../utils/config';
 
 const AddPasswordForm = () => {
   const [website, setWebsite] = useState('');
@@ -15,7 +16,7 @@ const AddPasswordForm = () => {
     if (website && username && password) {
       try {
         // Send the data to the backend API to save the password
-        const response = await fetch('http://localhost:5000/api/passwords/add', {
+        const response = await fetch(`${REACT_APP_API_BASE_URL}/api/passwords/add`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
